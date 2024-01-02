@@ -1,0 +1,36 @@
+name : Test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs : 
+  tests: 
+  runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: false
+
+      - name: Go build
+        working-directory: ./backend/
+        run: go build -v ./...
+
+      - name: Go testing
+        working-directory: ./backend/
+        run: go test -v ./...
+
+      - name: Golint install
+        run: go install golang.org/x/lint/golint@latest
+
+      - name: golint run
+        working-directory: ./backend/
+        run: golint ./...
