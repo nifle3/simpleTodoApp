@@ -8,17 +8,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// TODO: add uri path
-const uri string = ""
+const (
+	dbName  = "TodoDB"
+	colName = "users"
+)
 
 type Storage struct {
-	db *mongo.Client
+	db mongo.Client
 }
 
-// FIXME: change disconnect
-// TODO: add new options to client
-func NewStorage() (*Storage, error) {
-	db, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+func NewStorage(uri string) (*Storage, error) {
+	db, err := mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
 
 	if err != nil {
 		return nil, fmt.Errorf("can't connect to database")
@@ -26,11 +26,11 @@ func NewStorage() (*Storage, error) {
 
 	defer db.Disconnect(context.Background())
 
-	if err = db.Ping(context.TODO(), nil); err != nil {
+	if err = db.Ping(context.Background(), nil); err != nil {
 		return nil, fmt.Errorf("Cannot ping to database")
 	}
 
 	return &Storage{
-		db: db,
+		db: *db,
 	}, nil
 }
