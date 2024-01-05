@@ -5,3 +5,5 @@
 - htmx 
 - tailwind css
 ## Project's layout
+### Cmd consider main file
+### internal consider 
