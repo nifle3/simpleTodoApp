@@ -24,8 +24,6 @@ func NewStorage(uri string, ctx context.Context) (*Storage, error) {
 		return nil, fmt.Errorf("can't connect to database")
 	}
 
-	defer db.Disconnect(ctx)
-
 	if err = db.Ping(ctx, nil); err != nil {
 		return nil, fmt.Errorf("Cannot ping to database")
 	}
