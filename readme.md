@@ -1,9 +1,32 @@
-# Todo App 
+# Todo App
+
 ## Stack
+
 - go
-    1. go-chi
-- htmx 
+- htmx
 - tailwind css
+- mongodb
+
 ## Project's layout
-### Cmd consider main file
-### internal consider 
+
+### Cmd
+
+Consider main file.  
+
+### Internal
+
+## Commit Style
+
+### Commit type
+
+#### add
+
+When added new feature into project.
+
+#### fix
+
+When repair project's bug.
+
+#### refactor
+
+When change some code.
