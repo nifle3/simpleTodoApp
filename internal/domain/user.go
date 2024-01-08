@@ -1,7 +1,7 @@
 package domain
 
 type User struct {
-	ID       string `bson:'_id'`
-	Login    string `bson:'Login'`
-	Password string `bson:'Password'`
+	ID       string `json:'ID'`
+	Login    string `json:'Login'`
+	Password string `json:'Password'`
 }

@@ -6,11 +6,11 @@ import (
 )
 
 type Todo struct {
-	Name        string `bson:'Name' json:'Name'`
-	UserId      string
-	DeadLine    time.Time `bson:'DeadLine' json:'DeadLine'`
-	Description string    `bson:'Description' json:'Description'`
-	IsComplete  bool      `bson:'IsComplete'`
+	Name        string    `json:'Name'`
+	UserId      string    `json:'UserId'`
+	DeadLine    time.Time `json:'DeadLine'`
+	Description string    `json:'Description'`
+	IsComplete  bool      `json:'IsComplete'`
 }
 
 func CheckName(Name string) error {
