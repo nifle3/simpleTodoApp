@@ -1,8 +1,8 @@
 package domain
 
 type User struct {
-	ID       string `json:"ID""`
-	Login    string `json:'Login'`
-	Password string `json:'Password'`
-	Todos    []Todo `json:'Todo'`
+	ID       string `json:"ID,omitempty"`
+	Login    string `json:"Login"`
+	Password string `json:"Password"`
+	Email    string `json:"Email"`
 }
