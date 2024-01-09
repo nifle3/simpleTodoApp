@@ -7,7 +7,9 @@ import (
 
 type Storage interface {
 	AddUser(user domain.User, ctx context.Context) error
-	UpdateUser(user domain.User, ctx context.Context) error
+	UpdatePassword(password, userId string, ctx context.Context) error
+	UpdateLogin(login, userId string, ctx context.Context) error
+	UpdateEmail(email, userId string, ctx context.Context) error
 	DeleteUser(userId string, ctx context.Context) error
 	CheckUserExist(email string, ctx context.Context) (domain.User, error)
 }
