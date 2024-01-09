@@ -45,4 +45,4 @@ When change some code.
 
 ### Commit message
 
-`type`: message `in file/packages/files`
+*type*: message *in file/packages/files*
