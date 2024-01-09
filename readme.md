@@ -1,5 +1,7 @@
 # Todo App
 
+[Stack](#stack)
+
 ## Stack
 
 - go
@@ -7,13 +9,17 @@
 - tailwind css
 - mongodb
 
+[Project's layout](#projects-layout)
+
 ## Project's layout
 
 ### Cmd
 
-Consider main file.  
+Include main file.  
 
 ### Internal
+
+[Commmit style](#commit-style)
 
 ## Commit Style
 
@@ -30,3 +36,5 @@ When repair project's bug.
 #### refactor
 
 When change some code.
+
+### Commit message
