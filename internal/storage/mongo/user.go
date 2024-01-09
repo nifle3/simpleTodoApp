@@ -22,8 +22,20 @@ func (s Storage) AddUser(user domain.User, ctx context.Context) error {
 	return err
 }
 
-func (s Storage) UpdateUser(user domain.User, ctx context.Context) error {
-	id, err := primitive.ObjectIDFromHex(user.ID)
+func (s Storage) UpdateLogin(login, userId string, ctx context.Context) error {
+	return s.updateUserField(userId, "login", login, ctx)
+}
+
+func (s Storage) UpdatePassword(password, userId string, ctx context.Context) error {
+	return s.updateUserField(userId, "password", password, ctx)
+}
+
+func (s Storage) UpdateEmail(email, userId string, ctx context.Context) error {
+	return s.updateUserField(userId, "email", email, ctx)
+}
+
+func (s Storage) updateUserField(userId, key, value string, ctx context.Context) error {
+	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
 	}
@@ -31,9 +43,7 @@ func (s Storage) UpdateUser(user domain.User, ctx context.Context) error {
 	updatedStruct := bson.D{{
 		Key: "$set",
 		Value: bson.M{
-			"login":    user.Login,
-			"password": user.Password,
-			"email":    user.Email,
+			key: value,
 		},
 	}}
 
