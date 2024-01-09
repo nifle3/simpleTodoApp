@@ -21,6 +21,12 @@ Include main file.
 
 ### Internal
 
+Includes golang packages that usage only in this repository.
+
+### Pkg
+
+Includes golang packages that can be add in another repository.  
+
 ## Commit Style
 
 ### Commit type
