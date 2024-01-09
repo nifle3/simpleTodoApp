@@ -1,6 +1,10 @@
 # Todo App
 
-[Stack](#stack)
+## Table of contents
+
+1. [Project's layout](#projects-layout)
+2. [Stack](#stack)
+3. [Commmit style](#commit-style)
 
 ## Stack
 
@@ -9,8 +13,6 @@
 - tailwind css
 - mongodb
 
-[Project's layout](#projects-layout)
-
 ## Project's layout
 
 ### Cmd
@@ -18,8 +20,6 @@
 Include main file.  
 
 ### Internal
-
-[Commmit style](#commit-style)
 
 ## Commit Style
 
