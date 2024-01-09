@@ -1,4 +1,4 @@
-package storage
+package mongo
 
 import (
 	"context"
@@ -29,7 +29,8 @@ func (s Storage) UpdateUser(user domain.User, ctx context.Context) error {
 	}
 
 	updatedStruct := bson.D{{
-		"$set", bson.M{
+		Key: "$set",
+		Value: bson.M{
 			"login":    user.Login,
 			"password": user.Password,
 			"email":    user.Email,
