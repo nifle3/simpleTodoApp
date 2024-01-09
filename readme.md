@@ -17,7 +17,7 @@
 
 ### Cmd
 
-Include main file.  
+Includes main file.  
 
 ### Internal
 
@@ -44,3 +44,5 @@ When repair project's bug.
 When change some code.
 
 ### Commit message
+
+`type`: message `in file/packages/files`
