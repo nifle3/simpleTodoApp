@@ -42,8 +42,8 @@ func (s Storage) UpdateUser(user domain.User, ctx context.Context) error {
 	return err
 }
 
-func (s Storage) DeleteUser(user domain.User, ctx context.Context) error {
-	id, err := primitive.ObjectIDFromHex(user.ID)
+func (s Storage) DeleteUser(userId string, ctx context.Context) error {
+	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
 	}

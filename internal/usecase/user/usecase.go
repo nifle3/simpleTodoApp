@@ -8,8 +8,8 @@ import (
 type Storage interface {
 	AddUser(user domain.User, ctx context.Context) error
 	UpdateUser(user domain.User, ctx context.Context) error
-	DeleteUser(user domain.User, ctx context.Context) error
-	CheckUserExist(user domain.User, ctx context.Context) (domain.User, error)
+	DeleteUser(userId string, ctx context.Context) error
+	CheckUserExist(email string, ctx context.Context) (domain.User, error)
 }
 
 type UseCase struct {
