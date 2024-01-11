@@ -2,9 +2,9 @@ package mongo
 
 import (
 	"context"
-	"net/http"
+
 	"todoApp/internal/domain"
-	"todoApp/pkg/httpError"
+	httpError "todoApp/pkg/error"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,10 +13,7 @@ import (
 func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
+		return httpError.InternalServer(err.Error())
 	}
 
 	todo.ID = primitive.NewObjectID().Hex()
@@ -25,49 +22,25 @@ func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) e
 
 	_, err = s.userCollection.UpdateByID(ctx, id, push)
 
-	if err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
-	}
-
-	return httpError.Error{
-		StatusCode: http.StatusCreated,
-		Message:    "Todo created",
-	}
+	return err
 }
 
 func (s Storage) DeleteTodo(userId string, todoId string, ctx context.Context) httpError.Error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
+		return httpError.InternalServer(err.Error())
 	}
 
 	pull := bson.D{{Key: "$pull", Value: bson.D{{Key: "todos", Value: bson.D{{Key: "id", Value: todoId}}}}}}
-	if _, err = s.userCollection.UpdateByID(ctx, id, pull); err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
-	}
+	_, err = s.userCollection.UpdateByID(ctx, id, pull)
 
-	return httpError.Error{
-		StatusCode: http.StatusOK,
-		Message:    "todo deleted",
-	}
+	return err
 }
 
 func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context) httpError.Error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
+		return err
 	}
 
 	filter := bson.D{{Key: "_id", Value: id}, {Key: "todos.id", Value: todo.ID}}
@@ -80,26 +53,13 @@ func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context
 
 	_, err = s.userCollection.UpdateOne(ctx, filter, updated)
 
-	if err != nil {
-		return httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
-	}
-
-	return httpError.Error{
-		StatusCode: http.StatusOK,
-		Message:    "todo updated",
-	}
+	return err
 }
 
-func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, httpError.Error) {
+func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, error) {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return nil, httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
+		return nil, err
 	}
 
 	var todos struct {
@@ -107,14 +67,8 @@ func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, 
 	}
 
 	if err = s.userCollection.FindOne(ctx, bson.D{{Key: "_id", Value: id}}).Decode(&todos); err != nil {
-		return nil, httpError.Error{
-			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
-		}
+		return nil, err
 	}
 
-	return todos.Todos, httpError.Error{
-		StatusCode: http.StatusOK,
-		Message:    "get all todos",
-	}
+	return todos.Todos, nil
 }
