@@ -2,7 +2,7 @@ package domain
 
 type User struct {
 	ID       string `json:"ID,omitempty"`
-	Login    string `json:"Login"`
-	Password string `json:"Password"`
-	Email    string `json:"Email"`
+	Login    string `json:"Login,omitempty"`
+	Password string `json:"Password,omitempty"`
+	Email    string `json:"Email,omitemptys"`
 }

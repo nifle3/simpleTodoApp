@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"todoApp/internal/domain"
-	httpError "todoApp/pkg/error"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,7 +12,7 @@ import (
 func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return httpError.InternalServer(err.Error())
+		return err
 	}
 
 	todo.ID = primitive.NewObjectID().Hex()
@@ -28,7 +27,7 @@ func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) e
 func (s Storage) DeleteTodo(userId string, todoId string, ctx context.Context) httpError.Error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
-		return httpError.InternalServer(err.Error())
+		return err
 	}
 
 	pull := bson.D{{Key: "$pull", Value: bson.D{{Key: "todos", Value: bson.D{{Key: "id", Value: todoId}}}}}}
