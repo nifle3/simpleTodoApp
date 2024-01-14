@@ -1,4 +1,4 @@
-package converter
+package user
 
 import (
 	"todoApp/internal/domain"
