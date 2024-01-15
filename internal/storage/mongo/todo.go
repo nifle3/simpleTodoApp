@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"todoApp/internal/domain"
+	converter "todoApp/internal/storage/mongo/converter/todo"
+	"todoApp/internal/storage/mongo/object"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,40 +17,42 @@ func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) e
 		return err
 	}
 
-	todo.ID = primitive.NewObjectID().Hex()
+	mongoTodo, err := converter.ToMongo(todo)
 
-	push := bson.D{{Key: "$push", Value: bson.D{{Key: "todos", Value: todo}}}}
+	push := bson.D{{Key: "$push", Value: bson.D{{Key: "todos", Value: mongoTodo}}}}
 
 	_, err = s.userCollection.UpdateByID(ctx, id, push)
 
 	return err
 }
 
-func (s Storage) DeleteTodo(userId string, todoId string, ctx context.Context) httpError.Error {
+func (s Storage) DeleteTodo(userId string, todoId string, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
 	}
 
-	pull := bson.D{{Key: "$pull", Value: bson.D{{Key: "todos", Value: bson.D{{Key: "id", Value: todoId}}}}}}
+	todoObjectId, err := primitive.ObjectIDFromHex(todoId)
+
+	pull := bson.D{{Key: "$pull", Value: bson.D{{Key: "todos", Value: bson.D{{Key: "id", Value: todoObjectId}}}}}}
 	_, err = s.userCollection.UpdateByID(ctx, id, pull)
 
 	return err
 }
 
-func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context) httpError.Error {
+func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
 	}
 
-	filter := bson.D{{Key: "_id", Value: id}, {Key: "todos.id", Value: todo.ID}}
-	updated := bson.D{{Key: "$set", Value: bson.M{
-		"todos.$.name":        todo.Name,
-		"todos.$.deadline":    todo.DeadLine,
-		"todos.$.description": todo.Description,
-		"todo.$.iscomplete":   todo.IsComplete,
-	}}}
+	updatedObject, err := converter.ToMongo(todo)
+	if err != nil {
+		return err
+	}
+
+	filter := bson.D{{Key: "_id", Value: id}, {Key: "todos.id", Value: updatedObject.ID}}
+	updated := bson.D{{Key: "$set", Value: updatedObject}}
 
 	_, err = s.userCollection.UpdateOne(ctx, filter, updated)
 
@@ -62,12 +66,18 @@ func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, 
 	}
 
 	var todos struct {
-		Todos []domain.Todo `bson:"todos"`
+		Todos []object.Todo `bson:"todos"`
 	}
 
 	if err = s.userCollection.FindOne(ctx, bson.D{{Key: "_id", Value: id}}).Decode(&todos); err != nil {
 		return nil, err
 	}
 
-	return todos.Todos, nil
+	result := make([]domain.Todo, len(todos.Todos))
+
+	for idx := range result {
+		result[idx] = converter.ToDomain(todos.Todos[idx])
+	}
+
+	return result, nil
 }
