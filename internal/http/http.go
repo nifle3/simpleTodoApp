@@ -42,7 +42,7 @@ type ErrorRouter interface {
 
 type ErrorHandler func(http.ResponseWriter, *http.Request) error
 
-func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, tmR TemplateRouter, port string) {
+func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, tmR TemplateRouter, port string) error {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -76,5 +76,5 @@ func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, tmR
 		r.Delete("/user", er.CheckError(ur.Delete))
 	})
 
-	http.ListenAndServe(port, r)
+	return http.ListenAndServe(port, r)
 }
