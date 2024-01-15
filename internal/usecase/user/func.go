@@ -18,8 +18,8 @@ func (u UseCase) Add(user domain.User, ctx context.Context) error {
 	return u.storage.AddUser(user, ctx)
 }
 
-func (u UseCase) Delete(user domain.User, ctx context.Context) error {
-	return u.storage.DeleteUser(user.ID, ctx)
+func (u UseCase) Delete(userID string, ctx context.Context) error {
+	return u.storage.DeleteUser(userID, ctx)
 }
 
 func (u UseCase) UpdatePassword(userId, password string, ctx context.Context) error {
