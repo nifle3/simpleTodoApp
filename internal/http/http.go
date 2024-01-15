@@ -11,18 +11,24 @@ type TodoRouter interface {
 	Delete(http.ResponseWriter, *http.Request) error
 	Add(http.ResponseWriter, *http.Request) error
 	Update(http.ResponseWriter, *http.Request) error
-	GetAll(http.ResponseWriter, *http.Request) error
-	GetOne(http.ResponseWriter, *http.Request) error
 }
 
 type UserRouter interface {
 	Login(http.ResponseWriter, *http.Request) error
 	Registration(http.ResponseWriter, *http.Request) error
 	Delete(http.ResponseWriter, *http.Request) error
-	Get(http.ResponseWriter, *http.Request) error
 	UpdateLogin(http.ResponseWriter, *http.Request) error
 	UpdatePassword(http.ResponseWriter, *http.Request) error
 	UpdateEmail(http.ResponseWriter, *http.Request) error
+}
+
+type TemplateRouter interface {
+	GetUser(http.ResponseWriter, *http.Request) error
+	GetTodoOne(http.ResponseWriter, *http.Request) error
+	GetTodoAll(http.ResponseWriter, *http.Request) error
+	Main(http.ResponseWriter, *http.Request) error
+	Login(http.ResponseWriter, *http.Request) error
+	Registration(http.ResponseWriter, *http.Request) error
 }
 
 type SessionsRouter interface {
@@ -36,7 +42,7 @@ type ErrorRouter interface {
 
 type ErrorHandler func(http.ResponseWriter, *http.Request) error
 
-func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, port string) {
+func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, tmR TemplateRouter, port string) {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -44,9 +50,9 @@ func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, por
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)
 
-	r.Get("/", nil)
-	r.Get("/auth", nil)
-	r.Get("/registration", nil)
+	r.Get("/", er.CheckError(tmR.Main))
+	r.Get("/auth", er.CheckError(tmR.Login))
+	r.Get("/registration", er.CheckError(tmR.Registration))
 
 	r.Post("/auth", er.CheckError(ur.Login))
 
@@ -55,9 +61,9 @@ func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, por
 	r.Group(func(r chi.Router) {
 		r.Use(sr.CheckSession)
 
-		r.Get("/user", er.CheckError(ur.Get))
-		r.Get("/todo", er.CheckError(tr.GetAll))
-		r.Get("/todo/{id}", er.CheckError(tr.GetOne))
+		r.Get("/user", er.CheckError(tmR.GetUser))
+		r.Get("/todo", er.CheckError(tmR.GetTodoAll))
+		r.Get("/todo/{id}", er.CheckError(tmR.GetTodoOne))
 
 		r.Put("/todo", er.CheckError(tr.Add))
 
