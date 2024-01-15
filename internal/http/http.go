@@ -16,6 +16,13 @@ type TodoRouter interface {
 }
 
 type UserRouter interface {
+	Login(http.ResponseWriter, *http.Request) error
+	Registration(http.ResponseWriter, *http.Request) error
+	Delete(http.ResponseWriter, *http.Request) error
+	Get(http.ResponseWriter, *http.Request) error
+	UpdateLogin(http.ResponseWriter, *http.Request) error
+	UpdatePassword(http.ResponseWriter, *http.Request) error
+	UpdateEmail(http.ResponseWriter, *http.Request) error
 }
 
 type SessionsRouter interface {
@@ -41,26 +48,26 @@ func Listen(tr TodoRouter, ur UserRouter, sr SessionsRouter, er ErrorRouter, por
 	r.Get("/auth", nil)
 	r.Get("/registration", nil)
 
-	r.Post("/auth", nil)
+	r.Post("/auth", er.CheckError(ur.Login))
 
-	r.Put("/registration", nil)
+	r.Put("/registration", er.CheckError(ur.Registration))
 
 	r.Group(func(r chi.Router) {
 		r.Use(sr.CheckSession)
 
-		r.Get("/user", nil)
+		r.Get("/user", er.CheckError(ur.Get))
 		r.Get("/todo", er.CheckError(tr.GetAll))
 		r.Get("/todo/{id}", er.CheckError(tr.GetOne))
 
 		r.Put("/todo", er.CheckError(tr.Add))
 
-		r.Patch("/user/password", nil)
-		r.Patch("/user/login", nil)
-		r.Patch("/user/email", nil)
+		r.Patch("/user/password", er.CheckError(ur.UpdatePassword))
+		r.Patch("/user/login", er.CheckError(ur.UpdateLogin))
+		r.Patch("/user/email", er.CheckError(ur.UpdateEmail))
 		r.Patch("/todo", er.CheckError(tr.Update))
 
 		r.Delete("/todo/{id}", er.CheckError(tr.Delete))
-		r.Delete("/user", nil)
+		r.Delete("/user", er.CheckError(ur.Delete))
 	})
 
 	http.ListenAndServe(port, r)
