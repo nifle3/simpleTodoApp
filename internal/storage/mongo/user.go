@@ -3,21 +3,20 @@ package mongo
 import (
 	"context"
 	"todoApp/internal/domain"
+	converter "todoApp/internal/storage/mongo/converter/user"
+	"todoApp/internal/storage/mongo/object"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func (s Storage) AddUser(user domain.User, ctx context.Context) error {
-	insertStruct := bson.M{
-		"_id":      primitive.NewObjectID(),
-		"login":    user.Login,
-		"password": user.Password,
-		"email":    user.Email,
-		"todos":    make([]domain.Todo, 0),
+	insertStruct, err := converter.ToMongo(user)
+	if err != nil {
+		return err
 	}
 
-	_, err := s.userCollection.InsertOne(ctx, insertStruct)
+	_, err = s.userCollection.InsertOne(ctx, insertStruct)
 
 	return err
 }
@@ -64,21 +63,12 @@ func (s Storage) DeleteUser(userId string, ctx context.Context) error {
 }
 
 func (s Storage) CheckUserExist(email string, ctx context.Context) (domain.User, error) {
-	var resultUser struct {
-		Id       primitive.ObjectID `bson:"_id"`
-		Email    string             `bson:"email"`
-		Password string             `bson:"password"`
-		Login    string             `bson:"login"`
-	}
+	var resultUser object.User
 
 	err := s.userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&resultUser)
-
-	user := domain.User{
-		ID:       resultUser.Id.Hex(),
-		Email:    resultUser.Email,
-		Password: resultUser.Password,
-		Login:    resultUser.Login,
+	if err != nil {
+		return domain.User{}, err
 	}
 
-	return user, err
+	return converter.ToDomain(resultUser), nil
 }
