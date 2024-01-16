@@ -27,6 +27,14 @@ Includes golang packages that usage only in this repository.
 
 Includes golang packages that can be add in another repository.  
 
+### Web
+
+Includes static web pages.
+
+### Config
+
+Includes config.yml file.
+
 ## Commit Style
 
 ### Commit type

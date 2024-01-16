@@ -38,10 +38,10 @@ func MustLoad() *Config {
 		log.Fatal("Can't open file")
 	}
 
-	var config *Config
-	if err = yaml.Unmarshal(file, config); err != nil {
+	var config Config
+	if err = yaml.Unmarshal(file, &config); err != nil {
 		log.Fatal("Can't read from file")
 	}
 
-	return config
+	return &config
 }
