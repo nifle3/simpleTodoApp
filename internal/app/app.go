@@ -1,17 +1,21 @@
 package app
 
 import (
-	"fmt"
+	"log/slog"
+	"os"
 	"todoApp/internal/config"
 )
 
 func Start() {
 	cfg := config.MustLoad()
 
-	fmt.Println(*cfg)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	// log = logger.New()
+	logger.Info("App start", slog.Any("config is", cfg))
+
 	// db = storage.New()
+
 	// server = server.New()
+
 	// server.Listen()
 }
