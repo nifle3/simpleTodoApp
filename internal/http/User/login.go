@@ -3,14 +3,16 @@ package user
 import (
 	"context"
 	"net/http"
-	"todoApp/internal/domain"
 )
 
-func (r Router) Login(w http.ResponseWriter, rq *http.Request) (domain.User, error) {
+func (r Router) Login(w http.ResponseWriter, rq *http.Request) {
 	email := rq.PostFormValue("email")
 	password := rq.PostFormValue("password")
 
-	ctx := context.Background()
+	if _, err := r.useCase.Login(email, password, context.Background()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	return r.useCase.Login(email, password, ctx)
+	w.WriteHeader(http.StatusOK)
 }

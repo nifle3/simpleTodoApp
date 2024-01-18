@@ -8,12 +8,15 @@ import (
 )
 
 type TodoRouter interface {
+	GetOne(http.ResponseWriter, *http.Request)
+	GetAll(http.ResponseWriter, *http.Request)
 	Delete(http.ResponseWriter, *http.Request)
 	Add(http.ResponseWriter, *http.Request)
 	Update(http.ResponseWriter, *http.Request)
 }
 
 type UserRouter interface {
+	Get(http.ResponseWriter, *http.Request)
 	Login(http.ResponseWriter, *http.Request)
 	Registration(http.ResponseWriter, *http.Request)
 	Delete(http.ResponseWriter, *http.Request)
@@ -22,16 +25,7 @@ type UserRouter interface {
 	UpdateEmail(http.ResponseWriter, *http.Request)
 }
 
-type TemplateRouter interface {
-	GetUser(http.ResponseWriter, *http.Request)
-	GetTodoOne(http.ResponseWriter, *http.Request)
-	GetTodoAll(http.ResponseWriter, *http.Request)
-	Main(http.ResponseWriter, *http.Request)
-	Login(http.ResponseWriter, *http.Request)
-	Registration(http.ResponseWriter, *http.Request)
-}
-
-func Listen(tr TodoRouter, ur UserRouter, tmR TemplateRouter, port string) error {
+func Listen(tr TodoRouter, ur UserRouter, port string) error {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -39,17 +33,13 @@ func Listen(tr TodoRouter, ur UserRouter, tmR TemplateRouter, port string) error
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)
 
-	r.Get("/", tmR.Main)
-	r.Get("/auth", tmR.Login)
-	r.Get("/registration", tmR.Registration)
-
 	r.Post("/auth", ur.Login)
 
 	r.Put("/registration", ur.Registration)
 
-	r.Get("/user", tmR.GetUser)
-	r.Get("/todo", tmR.GetTodoAll)
-	r.Get("/todo/{id}", tmR.GetTodoOne)
+	r.Get("/user", ur.Get)
+	r.Get("/todo", tr.GetAll)
+	r.Get("/todo/{id}", tr.GetOne)
 
 	r.Put("/todo", tr.Add)
 

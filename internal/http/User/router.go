@@ -12,6 +12,7 @@ type UseCase interface {
 	UpdatePassword(userId, password string, ctx context.Context) error
 	UpdateEmail(userId, email string, ctx context.Context) error
 	UpdateLogin(userId, login string, ctx context.Context) error
+	Get()
 }
 
 type Router struct {

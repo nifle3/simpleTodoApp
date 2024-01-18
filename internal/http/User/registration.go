@@ -7,18 +7,19 @@ import (
 	"todoApp/internal/domain"
 )
 
-func (r Router) Registration(w http.ResponseWriter, rq *http.Request) error {
+func (r Router) Registration(w http.ResponseWriter, rq *http.Request) {
 	var result domain.User
 
 	if err := json.NewDecoder(rq.Body).Decode(&result); err != nil {
-		return err
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	ctx := context.Background()
-	err := r.useCase.Add(result, ctx)
+	err := r.useCase.Add(result, context.Background())
 	if err != nil {
-		return err
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	return nil
+	w.WriteHeader(http.StatusCreated)
 }

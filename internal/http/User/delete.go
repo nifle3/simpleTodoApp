@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
-func (r Router) Delete(userID string, w http.ResponseWriter, rq *http.Request) error {
-	return r.useCase.Delete(userID, context.Background())
+func (r Router) Delete(w http.ResponseWriter, rq *http.Request) {
+	if err := r.useCase.Delete("", context.Background()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

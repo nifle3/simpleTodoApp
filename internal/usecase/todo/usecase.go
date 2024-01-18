@@ -7,10 +7,11 @@ import (
 )
 
 type Storage interface {
-	AddTodo(userId string, todo domain.Todo, ctx context.Context) error
-	DeleteTodo(userId string, todoId string, ctx context.Context) error
-	UpdateTodo(userId string, todo domain.Todo, ctx context.Context) error
-	GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, error)
+	AddTodo(userID string, todo domain.Todo, ctx context.Context) error
+	DeleteTodo(userID, todoID string, ctx context.Context) error
+	UpdateTodo(userID string, todo domain.Todo, ctx context.Context) error
+	GetAllTodo(userID string, ctx context.Context) ([]domain.Todo, error)
+	GetOneTodo(userID, todoID string, ctx context.Context) (domain.Todo, error)
 }
 
 type UseCase struct {

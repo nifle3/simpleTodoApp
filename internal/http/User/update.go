@@ -5,20 +5,35 @@ import (
 	"net/http"
 )
 
-func (r Router) UpdatePassword(userId string, w http.ResponseWriter, rq *http.Request) error {
+func (r Router) UpdatePassword(w http.ResponseWriter, rq *http.Request) {
 	password := rq.FormValue("password")
 
-	return r.useCase.UpdatePassword(userId, password, context.Background())
+	if err := r.useCase.UpdatePassword("", password, context.Background()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
-func (r Router) UpdateLogin(userId string, w http.ResponseWriter, rq *http.Request) error {
+func (r Router) UpdateLogin(w http.ResponseWriter, rq *http.Request) {
 	login := rq.FormValue("login")
 
-	return r.useCase.UpdateLogin(userId, login, context.Background())
+	if err := r.useCase.UpdateLogin("", login, context.Background()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
-func (r Router) UpdateEmail(userId string, w http.ResponseWriter, rq *http.Request) error {
+func (r Router) UpdateEmail(w http.ResponseWriter, rq *http.Request) {
 	email := rq.FormValue("email")
 
-	return r.useCase.UpdateEmail(userId, email, context.Background())
+	if err := r.useCase.UpdateEmail("", email, context.Background()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
