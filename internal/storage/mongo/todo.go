@@ -81,3 +81,29 @@ func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, 
 
 	return result, nil
 }
+
+func (s Storage) GetOneTodo(userID, todoID string, ctx context.Context) (domain.Todo, error) {
+	userIDHex, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return domain.Todo{}, err
+	}
+
+	todoIDHex, err := primitive.ObjectIDFromHex(todoID)
+	if err != nil {
+		return domain.Todo{}, err
+	}
+
+	filter := bson.D{{Key: "_id", Value: userIDHex}, {Key: "todos.id", Value: todoIDHex}}
+
+	result := s.userCollection.FindOne(ctx, filter)
+	if result.Err() != nil {
+		return domain.Todo{}, result.Err()
+	}
+
+	var todo object.Todo
+	if err := result.Decode(&todo); err != nil {
+		return domain.Todo{}, err
+	}
+
+	return converter.ToDomain(todo), nil
+}
