@@ -17,7 +17,7 @@ type Storage struct {
 	userCollection *mongo.Collection
 }
 
-func NewStorage(uri string, ctx context.Context) (*Storage, error) {
+func New(uri string, ctx context.Context) (*Storage, error) {
 	db, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 
 	if err != nil {

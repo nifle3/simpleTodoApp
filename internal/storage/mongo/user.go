@@ -73,7 +73,7 @@ func (s Storage) CheckUserExist(email string, ctx context.Context) (domain.User,
 	return converter.ToDomain(resultUser), nil
 }
 
-func (s Storage) GetUser(userID string, ctx context.Context) (domain.User, error) {
+func (s Storage) Get(userID string, ctx context.Context) (domain.User, error) {
 	filter := bson.D{{Key: "_id", Value: userID}}
 	result := s.userCollection.FindOne(ctx, filter)
 	if result.Err() != nil {

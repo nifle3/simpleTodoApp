@@ -26,21 +26,18 @@ type UserRouter interface {
 }
 
 type Session interface {
-	Add(HttpUserIDOutHandler) http.HandlerFunc
-	Check(HttpUserIDInHandler) http.HandlerFunc
+	Add(func(http.ResponseWriter, *http.Request) (string, error)) http.HandlerFunc
+	Check(func(string, http.ResponseWriter, *http.Request)) http.HandlerFunc
 }
 
 type Logger interface {
-	Log(next http.HandlerFunc) http.HandlerFunc
+	Log(next http.Handler) http.Handler
 }
 
-type HttpUserIDInHandler func(string, http.ResponseWriter, *http.Request)
-type HttpUserIDOutHandler func(http.ResponseWriter, *http.Request) (string, error)
-
-func Listen(tr TodoRouter, ur UserRouter, session Session, port string) error {
+func Listen(tr TodoRouter, ur UserRouter, session Session, log Logger, port string) error {
 	r := chi.NewRouter()
 
-	r.Use(middleware.Logger)
+	r.Use(log.Log)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)

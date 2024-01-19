@@ -11,11 +11,11 @@ import (
 const (
 	cookieName = "token"
 )
-
 type (
-	HttpUserIDInHandler  func(string, http.ResponseWriter, *http.Request)
-	HttpUserIDOutHandler func(http.ResponseWriter, *http.Request) (string, error)
+	HttpUserIDInHandler  
+	HttpUserIDOutHandler 
 )
+
 
 type JWT struct {
 	secretKey []byte
@@ -27,7 +27,7 @@ func New(key string) *JWT {
 	}
 }
 
-func (j JWT) Add(next HttpUserIDOutHandler) http.HandlerFunc {
+func (j JWT) Add(next func(http.ResponseWriter, *http.Request) (string, error)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID, err := next(w, r)
 		if err != nil {
@@ -56,7 +56,7 @@ func (j JWT) Add(next HttpUserIDOutHandler) http.HandlerFunc {
 	}
 }
 
-func (j JWT) Check(next HttpUserIDInHandler) http.HandlerFunc {
+func (j JWT) Check(next func(string, http.ResponseWriter, *http.Request)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie(cookieName)
 		if err != nil {
