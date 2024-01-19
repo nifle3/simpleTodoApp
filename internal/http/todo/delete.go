@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func (r Router) Delete(w http.ResponseWriter, rq *http.Request) {
+func (r Router) Delete(userID string, w http.ResponseWriter, rq *http.Request) {
 	todoID := rq.PostFormValue("todo_id")
 
-	if err := r.useCase.DeleteTodo("", todoID, context.Background()); err != nil {
+	if err := r.useCase.Delete(userID, todoID, context.Background()); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}

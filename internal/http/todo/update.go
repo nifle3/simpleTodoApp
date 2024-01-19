@@ -7,7 +7,7 @@ import (
 	"todoApp/internal/domain"
 )
 
-func (r Router) Update(w http.ResponseWriter, rq *http.Request) {
+func (r Router) Update(userID string, w http.ResponseWriter, rq *http.Request) {
 	var result domain.Todo
 
 	if err := json.NewDecoder(rq.Body).Decode(&result); err != nil {
@@ -15,7 +15,7 @@ func (r Router) Update(w http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	if err := r.useCase.UpdateTodo("", result, context.Background()); err != nil {
+	if err := r.useCase.Update(userID, result, context.Background()); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

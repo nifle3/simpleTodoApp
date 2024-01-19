@@ -10,7 +10,7 @@ const (
 	todoQuery = "todo_id"
 )
 
-func (r Router) GetOne(w http.ResponseWriter, rq *http.Request) {
+func (r Router) GetOne(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
 	if !rq.URL.Query().Has(todoQuery) {
@@ -20,7 +20,7 @@ func (r Router) GetOne(w http.ResponseWriter, rq *http.Request) {
 
 	todoID := rq.URL.Query().Get(todoQuery)
 
-	result, err := r.useCase.GetOne("", todoID, context.Background())
+	result, err := r.useCase.GetOne(userID, todoID, context.Background())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -34,10 +34,10 @@ func (r Router) GetOne(w http.ResponseWriter, rq *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
 }
 
-func (r Router) GetAll(w http.ResponseWriter, rq *http.Request) {
+func (r Router) GetAll(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
-	result, err := r.useCase.GetAll("", context.Background())
+	result, err := r.useCase.GetAll(userID, context.Background())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
