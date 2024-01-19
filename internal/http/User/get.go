@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func (r Router) Get(w http.ResponseWriter, rq *http.Request) {
+func (r Router) Get(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 
-	result, err := r.useCase.Get("", context.Background())
+	result, err := r.useCase.Get(userID, context.Background())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
