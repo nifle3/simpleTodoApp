@@ -30,6 +30,10 @@ type Session interface {
 	Check(HttpUserIDInHandler) http.HandlerFunc
 }
 
+type Logger interface {
+	Log(next http.HandlerFunc) http.HandlerFunc
+}
+
 type HttpUserIDInHandler func(string, http.ResponseWriter, *http.Request)
 type HttpUserIDOutHandler func(http.ResponseWriter, *http.Request) (string, error)
 
