@@ -4,4 +4,4 @@ http_server:
   port: ":8080"
   timeout: 4s
   idle_timeout: 60s
-  session_key: "MBxE4MUrIfayyvN"
+  jwt_key: "MBxE4MUrIfayyvN"

@@ -8,24 +8,32 @@ import (
 )
 
 type TodoRouter interface {
-	GetOne(http.ResponseWriter, *http.Request)
-	GetAll(http.ResponseWriter, *http.Request)
-	Delete(http.ResponseWriter, *http.Request)
-	Add(http.ResponseWriter, *http.Request)
-	Update(http.ResponseWriter, *http.Request)
+	GetOne(string, http.ResponseWriter, *http.Request)
+	GetAll(string, http.ResponseWriter, *http.Request)
+	Delete(string, http.ResponseWriter, *http.Request)
+	Add(string, http.ResponseWriter, *http.Request)
+	Update(string, http.ResponseWriter, *http.Request)
 }
 
 type UserRouter interface {
-	Get(http.ResponseWriter, *http.Request)
-	Login(http.ResponseWriter, *http.Request)
+	Get(string, http.ResponseWriter, *http.Request)
+	Login(http.ResponseWriter, *http.Request) (string, error)
 	Registration(http.ResponseWriter, *http.Request)
-	Delete(http.ResponseWriter, *http.Request)
-	UpdateLogin(http.ResponseWriter, *http.Request)
-	UpdatePassword(http.ResponseWriter, *http.Request)
-	UpdateEmail(http.ResponseWriter, *http.Request)
+	Delete(string, http.ResponseWriter, *http.Request)
+	UpdateLogin(string, http.ResponseWriter, *http.Request)
+	UpdatePassword(string, http.ResponseWriter, *http.Request)
+	UpdateEmail(string, http.ResponseWriter, *http.Request)
 }
 
-func Listen(tr TodoRouter, ur UserRouter, port string) error {
+type Session interface {
+	Add(HttpUserIDOutHandler) http.HandlerFunc
+	Check(HttpUserIDInHandler) http.HandlerFunc
+}
+
+type HttpUserIDInHandler func(string, http.ResponseWriter, *http.Request)
+type HttpUserIDOutHandler func(http.ResponseWriter, *http.Request) (string, error)
+
+func Listen(tr TodoRouter, ur UserRouter, session Session, port string) error {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -33,23 +41,23 @@ func Listen(tr TodoRouter, ur UserRouter, port string) error {
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)
 
-	r.Post("/auth", ur.Login)
+	r.Post("/auth", session.Add(ur.Login))
 
 	r.Put("/registration", ur.Registration)
 
-	r.Get("/user", ur.Get)
-	r.Get("/todo", tr.GetAll)
-	r.Get("/todo/{id}", tr.GetOne)
+	r.Get("/user", session.Check(ur.Get))
+	r.Get("/todo", session.Check(tr.GetAll))
+	r.Get("/todo/{id}", session.Check(tr.GetOne))
 
-	r.Put("/todo", tr.Add)
+	r.Put("/todo", session.Check(tr.Add))
 
-	r.Patch("/user/password", ur.UpdatePassword)
-	r.Patch("/user/login", ur.UpdateLogin)
-	r.Patch("/user/email", ur.UpdateEmail)
-	r.Patch("/todo", tr.Update)
+	r.Patch("/user/password", session.Check(ur.UpdatePassword))
+	r.Patch("/user/login", session.Check(ur.UpdateLogin))
+	r.Patch("/user/email", session.Check(ur.UpdateEmail))
+	r.Patch("/todo", session.Check(tr.Update))
 
-	r.Delete("/todo/{id}", tr.Delete)
-	r.Delete("/user", ur.Delete)
+	r.Delete("/todo/{id}", session.Check(tr.Delete))
+	r.Delete("/user", session.Check(ur.Delete))
 
 	return http.ListenAndServe(port, r)
 }

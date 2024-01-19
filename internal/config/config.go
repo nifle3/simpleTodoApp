@@ -21,7 +21,7 @@ type HttpServer struct {
 	Port        string        `yaml:"port"`
 	Timeout     time.Duration `yaml:"timeout"`
 	IdleTimeout time.Duration `yaml:"idle_timeout"`
-	SessionKey  string        `yaml:"session_key"`
+	JwtKey      string        `yaml:"jwt_key"`
 }
 
 func MustLoad() *Config {
