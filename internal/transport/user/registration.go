@@ -1,24 +1,25 @@
-package todo
+package user
 
 import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 )
 
-func (r Router) Update(userID string, w http.ResponseWriter, rq *http.Request) {
-	var result domain.Todo
+func (r Router) Registration(w http.ResponseWriter, rq *http.Request) {
+	var result models.User
 
 	if err := json.NewDecoder(rq.Body).Decode(&result); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := r.useCase.Update(userID, result, context.Background()); err != nil {
+	err := r.useCase.Add(result, context.Background())
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 }

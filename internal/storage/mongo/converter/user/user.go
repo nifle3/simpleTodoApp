@@ -1,13 +1,13 @@
 package user
 
 import (
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 	"todoApp/internal/storage/mongo/object"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func ToMongo(user domain.User) (object.User, error) {
+func ToMongo(user models.User) (object.User, error) {
 	id, err := primitive.ObjectIDFromHex(user.ID)
 	if err != nil {
 		return object.User{}, err
@@ -21,8 +21,8 @@ func ToMongo(user domain.User) (object.User, error) {
 	}, nil
 }
 
-func ToDomain(user object.User) domain.User {
-	return domain.User{
+func ToDomain(user object.User) models.User {
+	return models.User{
 		ID:       user.ID.Hex(),
 		Login:    user.Login,
 		Password: user.Password,

@@ -2,17 +2,17 @@ package user
 
 import (
 	"context"
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 )
 
 type Storage interface {
-	AddUser(user domain.User, ctx context.Context) error
+	AddUser(user models.User, ctx context.Context) error
 	UpdatePassword(password, userID string, ctx context.Context) error
 	UpdateLogin(login, userID string, ctx context.Context) error
 	UpdateEmail(email, userID string, ctx context.Context) error
 	DeleteUser(userID string, ctx context.Context) error
-	CheckUserExist(email string, ctx context.Context) (domain.User, error)
-	Get(userID string, ctx context.Context) (domain.User, error)
+	CheckUserExist(email string, ctx context.Context) (models.User, error)
+	Get(userID string, ctx context.Context) (models.User, error)
 }
 
 type UseCase struct {

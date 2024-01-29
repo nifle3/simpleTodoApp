@@ -42,23 +42,23 @@ func Listen(tr TodoRouter, ur UserRouter, session Session, log Logger, port stri
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)
 
-	r.Post("/auth", session.Add(ur.Login))
+	r.Post("/v1/auth", session.Add(ur.Login))
 
-	r.Put("/registration", ur.Registration)
+	r.Put("/v1/registration", ur.Registration)
 
-	r.Get("/user", session.Check(ur.Get))
-	r.Get("/todo", session.Check(tr.GetAll))
-	r.Get("/todo/{id}", session.Check(tr.GetOne))
+	r.Get("/v1/user", session.Check(ur.Get))
+	r.Get("/v1/todo", session.Check(tr.GetAll))
+	r.Get("/v1/todo/{id}", session.Check(tr.GetOne))
 
-	r.Put("/todo", session.Check(tr.Add))
+	r.Put("/v1/todo", session.Check(tr.Add))
 
-	r.Patch("/user/password", session.Check(ur.UpdatePassword))
-	r.Patch("/user/login", session.Check(ur.UpdateLogin))
-	r.Patch("/user/email", session.Check(ur.UpdateEmail))
-	r.Patch("/todo", session.Check(tr.Update))
+	r.Patch("/v1/user/password", session.Check(ur.UpdatePassword))
+	r.Patch("/v1/user/login", session.Check(ur.UpdateLogin))
+	r.Patch("/v1/user/email", session.Check(ur.UpdateEmail))
+	r.Patch("/v1/todo", session.Check(tr.Update))
 
-	r.Delete("/todo/{id}", session.Check(tr.Delete))
-	r.Delete("/user", session.Check(ur.Delete))
+	r.Delete("/v1/todo/{id}", session.Check(tr.Delete))
+	r.Delete("/v1/user", session.Check(ur.Delete))
 
 	return http.ListenAndServe(port, r)
 }

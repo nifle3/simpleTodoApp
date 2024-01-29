@@ -3,11 +3,11 @@ package user
 import (
 	"context"
 
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 	"todoApp/pkg/hashing"
 )
 
-func (u UseCase) Add(user domain.User, ctx context.Context) error {
+func (u UseCase) Add(user models.User, ctx context.Context) error {
 	password, err := hashing.HashPassword(user.Password)
 	if err != nil {
 		return err

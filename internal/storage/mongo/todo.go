@@ -3,7 +3,7 @@ package mongo
 import (
 	"context"
 
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 	converter "todoApp/internal/storage/mongo/converter/todo"
 	"todoApp/internal/storage/mongo/object"
 
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (s Storage) AddTodo(userId string, todo domain.Todo, ctx context.Context) error {
+func (s Storage) AddTodo(userId string, todo models.Todo, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (s Storage) DeleteTodo(userId string, todoId string, ctx context.Context) e
 	return err
 }
 
-func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context) error {
+func (s Storage) UpdateTodo(userId string, todo models.Todo, ctx context.Context) error {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
@@ -59,7 +59,7 @@ func (s Storage) UpdateTodo(userId string, todo domain.Todo, ctx context.Context
 	return err
 }
 
-func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, error) {
+func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]models.Todo, error) {
 	id, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return nil, err
@@ -73,37 +73,37 @@ func (s Storage) GetAllTodo(userId string, ctx context.Context) ([]domain.Todo, 
 		return nil, err
 	}
 
-	result := make([]domain.Todo, len(todos.Todos))
+	result := make([]models.Todo, len(todos.Todos))
 
 	for idx := range result {
-		result[idx] = converter.ToDomain(todos.Todos[idx])
+		result[idx] = converter.ToModel(todos.Todos[idx])
 	}
 
 	return result, nil
 }
 
-func (s Storage) GetOneTodo(userID, todoID string, ctx context.Context) (domain.Todo, error) {
+func (s Storage) GetOneTodo(userID, todoID string, ctx context.Context) (models.Todo, error) {
 	userIDHex, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
-		return domain.Todo{}, err
+		return models.Todo{}, err
 	}
 
 	todoIDHex, err := primitive.ObjectIDFromHex(todoID)
 	if err != nil {
-		return domain.Todo{}, err
+		return models.Todo{}, err
 	}
 
 	filter := bson.D{{Key: "_id", Value: userIDHex}, {Key: "todos.id", Value: todoIDHex}}
 
 	result := s.userCollection.FindOne(ctx, filter)
 	if result.Err() != nil {
-		return domain.Todo{}, result.Err()
+		return models.Todo{}, result.Err()
 	}
 
 	var todo object.Todo
 	if err := result.Decode(&todo); err != nil {
-		return domain.Todo{}, err
+		return models.Todo{}, err
 	}
 
-	return converter.ToDomain(todo), nil
+	return converter.ToModel(todo), nil
 }

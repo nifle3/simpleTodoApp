@@ -1,13 +1,13 @@
 package todo
 
 import (
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 	"todoApp/internal/storage/mongo/object"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func ToMongo(todo domain.Todo) (object.Todo, error) {
+func ToMongo(todo models.Todo) (object.Todo, error) {
 	id, err := primitive.ObjectIDFromHex(todo.ID)
 	if err != nil {
 		return object.Todo{}, err
@@ -22,8 +22,8 @@ func ToMongo(todo domain.Todo) (object.Todo, error) {
 	}, nil
 }
 
-func ToDomain(todo object.Todo) domain.Todo {
-	return domain.Todo{
+func ToModel(todo object.Todo) models.Todo {
+	return models.Todo{
 		ID:          todo.ID.Hex(),
 		Name:        todo.Name,
 		DeadLine:    todo.Deadline,

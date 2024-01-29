@@ -11,11 +11,6 @@ import (
 const (
 	cookieName = "token"
 )
-type (
-	HttpUserIDInHandler  
-	HttpUserIDOutHandler 
-)
-
 
 type JWT struct {
 	secretKey []byte

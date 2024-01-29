@@ -2,7 +2,7 @@ package mongo
 
 import (
 	"context"
-	"todoApp/internal/domain"
+	"todoApp/internal/models"
 	converter "todoApp/internal/storage/mongo/converter/user"
 	"todoApp/internal/storage/mongo/object"
 
@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (s Storage) AddUser(user domain.User, ctx context.Context) error {
+func (s Storage) AddUser(user models.User, ctx context.Context) error {
 	insertStruct, err := converter.ToMongo(user)
 	if err != nil {
 		return err
@@ -62,27 +62,27 @@ func (s Storage) DeleteUser(userId string, ctx context.Context) error {
 	return err
 }
 
-func (s Storage) CheckUserExist(email string, ctx context.Context) (domain.User, error) {
+func (s Storage) CheckUserExist(email string, ctx context.Context) (models.User, error) {
 	var resultUser object.User
 
 	err := s.userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&resultUser)
 	if err != nil {
-		return domain.User{}, err
+		return models.User{}, err
 	}
 
 	return converter.ToDomain(resultUser), nil
 }
 
-func (s Storage) Get(userID string, ctx context.Context) (domain.User, error) {
+func (s Storage) Get(userID string, ctx context.Context) (models.User, error) {
 	filter := bson.D{{Key: "_id", Value: userID}}
 	result := s.userCollection.FindOne(ctx, filter)
 	if result.Err() != nil {
-		return domain.User{}, result.Err()
+		return models.User{}, result.Err()
 	}
 
 	var user object.User
 	if err := result.Decode(&user); err != nil {
-		return domain.User{}, err
+		return models.User{}, err
 	}
 
 	return converter.ToDomain(user), nil
