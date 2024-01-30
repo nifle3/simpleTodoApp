@@ -5,6 +5,9 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+
+	_ "todoApp/docs"
 )
 
 type TodoRouter interface {
@@ -41,6 +44,10 @@ func Listen(tr TodoRouter, ur UserRouter, session Session, log Logger, port stri
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.CleanPath)
 	r.Use(middleware.GetHead)
+
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://localhost:1323/swagger/doc.json"), //The url pointing to API definition
+	))
 
 	r.Post("/v1/auth", session.Add(ur.Login))
 

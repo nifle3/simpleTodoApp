@@ -1,0 +1,16 @@
+basePath: /v1
+consumes:
+- application/json
+host: :8080
+info:
+  contact: {}
+  description: simple golang pet project
+  license:
+    name: MIT
+  termsOfService: http://swagger.io/terms/
+  title: todo app
+  version: "1.0"
+paths: {}
+produces:
+- application/json
+swagger: "2.0"
