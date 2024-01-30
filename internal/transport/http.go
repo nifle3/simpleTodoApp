@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -46,7 +47,7 @@ func Listen(tr TodoRouter, ur UserRouter, session Session, log Logger, port stri
 	r.Use(middleware.GetHead)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json"), //The url pointing to API definition
+		httpSwagger.URL(fmt.Sprint("http://localhost%s/swagger/doc.json", port)), //The url pointing to API definition
 	))
 
 	r.Post("/v1/auth", session.Add(ur.Login))
