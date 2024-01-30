@@ -1,6 +1,20 @@
 basePath: /v1
 consumes:
 - application/json
+definitions:
+  models.Todo:
+    properties:
+      DeadLine:
+        type: string
+      Description:
+        type: string
+      Id:
+        type: string
+      IsComplete:
+        type: boolean
+      Name:
+        type: string
+    type: object
 host: :8080
 info:
   contact: {}
@@ -10,7 +24,132 @@ info:
   termsOfService: http://swagger.io/terms/
   title: todo app
   version: "1.0"
-paths: {}
+paths:
+  /v1/get:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: many models
+          schema:
+            items:
+              $ref: '#/definitions/models.Todo'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get all user's todo
+      tags:
+      - Todo
+  /v1/todo:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: todo id in stirng
+        in: formData
+        name: todo_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+      summary: Delete todo from user
+      tags:
+      - Todo
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: used for updated created todo
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Todo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update todo for user
+      tags:
+      - Todo
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: todo
+        in: body
+        name: input
+        schema:
+          $ref: '#/definitions/models.Todo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add todo for user
+      tags:
+      - Todo
+  /v1/todo/{id}:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: one model
+          schema:
+            $ref: '#/definitions/models.Todo'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get todo
+      tags:
+      - Todo
 produces:
 - application/json
 swagger: "2.0"

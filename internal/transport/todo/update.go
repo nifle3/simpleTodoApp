@@ -7,6 +7,16 @@ import (
 	"todoApp/internal/models"
 )
 
+// @Summary	Update todo for user
+// @Tags		Todo
+// @Accept		json
+// @Produce	json
+// @Param		input	body		models.Todo	true	"used for updated created todo"
+// @Failure	400		{object}	error
+// @Failure	401		{object}	error
+// @Failure	500		{object}	error
+// @Success	200
+// @Router		/v1/todo [patch]
 func (r Router) Update(userID string, w http.ResponseWriter, rq *http.Request) {
 	var result models.Todo
 

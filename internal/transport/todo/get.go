@@ -10,6 +10,15 @@ const (
 	todoQuery = "todo_id"
 )
 
+// @Summary	Get todo
+// @Tags		Todo
+// @Accept		json
+// @Produce	json
+// @Failure	400	{object}	error
+// @Failure	401	{object}	error
+// @Failure	500	{object}	error
+// @Success	200	{object}	models.Todo	"one model"
+// @Router		/v1/todo/{id} [get]
 func (r Router) GetOne(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
@@ -31,9 +40,18 @@ func (r Router) GetOne(userID string, w http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusOK)
 }
 
+// @Summary	Get all user's todo
+// @Tags		Todo
+// @Accept		json
+// @Produce	json
+// @Failure	400	{object}	error
+// @Failure	401	{object}	error
+// @Failure	500	{object}	error
+// @Success	200	{object}	[]models.Todo	"many models"
+// @Router		/v1/get [get]
 func (r Router) GetAll(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
@@ -48,5 +66,5 @@ func (r Router) GetAll(userID string, w http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusOK)
 }

@@ -47,7 +47,7 @@ func Listen(tr TodoRouter, ur UserRouter, session Session, log Logger, port stri
 	r.Use(middleware.GetHead)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL(fmt.Sprint("http://localhost%s/swagger/doc.json", port)), //The url pointing to API definition
+		httpSwagger.URL(fmt.Sprintf("http://localhost%s/swagger/doc.json", port)), //The url pointing to API definition
 	))
 
 	r.Post("/v1/auth", session.Add(ur.Login))
