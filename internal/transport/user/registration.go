@@ -7,6 +7,16 @@ import (
 	"todoApp/internal/models"
 )
 
+// @Summary	Registration user
+// @Tags		Auth service
+// @Accept		json
+// @Produce	json
+// @Param		input	body		models.User	true	"new user"
+// @Failure	400		{object}	error
+// @Failure	401		{object}	error
+// @Failure	500		{object}	error
+// @Success	200
+// @Router		/v1/registration [put]
 func (r Router) Registration(w http.ResponseWriter, rq *http.Request) {
 	var result models.User
 

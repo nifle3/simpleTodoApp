@@ -5,6 +5,15 @@ import (
 	"net/http"
 )
 
+//	@Summary	Update password
+//	@Tags		User
+//	@Accept		json
+//	@Produce	json
+//	@Param		password	formData	string	true	"new password"
+//	@Failure	401			{object}	error
+//	@Failure	500			{object}	error
+//	@Success	200
+//	@Router		/v1/user/password [patch]
 func (r Router) UpdatePassword(userID string, w http.ResponseWriter, rq *http.Request) {
 	password := rq.FormValue("password")
 
@@ -16,6 +25,15 @@ func (r Router) UpdatePassword(userID string, w http.ResponseWriter, rq *http.Re
 	w.WriteHeader(http.StatusOK)
 }
 
+//	@Summary	Update login
+//	@Tags		User
+//	@Accept		json
+//	@Produce	json
+//	@Param		login	formData	string	true	"new login"
+//	@Failure	401		{object}	error
+//	@Failure	500		{object}	error
+//	@Success	200
+//	@Router		/v1/user/login [patch]
 func (r Router) UpdateLogin(userID string, w http.ResponseWriter, rq *http.Request) {
 	login := rq.FormValue("login")
 
@@ -27,6 +45,15 @@ func (r Router) UpdateLogin(userID string, w http.ResponseWriter, rq *http.Reque
 	w.WriteHeader(http.StatusOK)
 }
 
+//	@Summary	Update emaail
+//	@Tags		User
+//	@Accept		json
+//	@Produce	json
+//	@Param		email	formData	string	true	"new email"
+//	@Failure	401		{object}	error
+//	@Failure	500		{object}	error
+//	@Success	200
+//	@Router		/v1/user/email [patch]
 func (r Router) UpdateEmail(userID string, w http.ResponseWriter, rq *http.Request) {
 	email := rq.FormValue("email")
 

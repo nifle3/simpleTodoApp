@@ -15,6 +15,17 @@ definitions:
       Name:
         type: string
     type: object
+  models.User:
+    properties:
+      Email:
+        type: string
+      ID:
+        type: string
+      Login:
+        type: string
+      Password:
+        type: string
+    type: object
 host: :8080
 info:
   contact: {}
@@ -25,6 +36,38 @@ info:
   title: todo app
   version: "1.0"
 paths:
+  /v1/auth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user's email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: user's password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Log in
+      tags:
+      - Auth service
   /v1/get:
     get:
       consumes:
@@ -50,6 +93,34 @@ paths:
       summary: Get all user's todo
       tags:
       - Todo
+  /v1/registration:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: new user
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Registration user
+      tags:
+      - Auth service
   /v1/todo:
     delete:
       consumes:
@@ -131,6 +202,12 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: todo id which get
+        in: query
+        name: todo_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -150,6 +227,119 @@ paths:
       summary: Get todo
       tags:
       - Todo
+  /v1/user:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get user
+      tags:
+      - User
+  /v1/user/email:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: new email
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update emaail
+      tags:
+      - User
+  /v1/user/login:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: new login
+        in: formData
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update login
+      tags:
+      - User
+  /v1/user/password:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: new password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update password
+      tags:
+      - User
 produces:
 - application/json
 swagger: "2.0"
