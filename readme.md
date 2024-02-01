@@ -9,8 +9,6 @@
 ## Stack
 
 - go
-- htmx
-- tailwind css
 - mongodb
 
 ## Project's layout
@@ -23,13 +21,65 @@ Includes main file.
 
 Includes golang packages that usage only in this repository.
 
+#### Internal/app
+
+Projet's start point
+
+#### Internal/config
+
+Config reader
+
+#### Internal/models
+
+Includes projet's models
+
+#### Services
+
+Merge all branch of projet's
+
+#### Storage/mongo
+
+Includes files for using mongodb
+
+##### Storage/mongo/converter
+
+Includes function for convert models to mongo objects and mongo objects to models
+
+##### Storage/mongo/object
+
+Includes mongo object
+
+#### Transport
+
+Includes http router
+
+##### Transport/todo
+
+Router for todo model
+
+##### Transport/user
+
+Router for user model
+
+##### Transport/jwtToken
+
+Packages for usage jwt tokens
+
 ### Pkg
 
-Includes golang packages that can be add in another repository.  
+Includes golang packages that can be add in another repository.
 
-### Web
+#### Pgk/hashing
 
-Includes static web pages.
+Includes function for hashing string
+
+#### Pkg/middleware
+
+Includes some middleware for http route
+
+### Docs
+
+Includes swagger documentation
 
 ### Config
 

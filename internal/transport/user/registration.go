@@ -11,7 +11,7 @@ import (
 // @Tags		Auth service
 // @Accept		json
 // @Produce	json
-// @Param		input	body		models.User	true	"new user"
+// @Param		input	body			models.User	true	"new user"
 // @Failure	400		{object}	error
 // @Failure	401		{object}	error
 // @Failure	500		{object}	error
