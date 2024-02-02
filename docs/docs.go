@@ -550,13 +550,13 @@ const docTemplate = `{
                 "Email": {
                     "type": "string"
                 },
-                "ID": {
-                    "type": "string"
-                },
                 "Login": {
                     "type": "string"
                 },
                 "Password": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 }
             }

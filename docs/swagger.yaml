@@ -18,11 +18,11 @@ definitions:
     properties:
       Email:
         type: string
-      ID:
-        type: string
       Login:
         type: string
       Password:
+        type: string
+      id:
         type: string
     type: object
 host: :8080
