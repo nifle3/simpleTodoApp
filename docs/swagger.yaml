@@ -1,4 +1,3 @@
-basePath: /v1
 consumes:
 - application/json
 definitions:
@@ -90,6 +89,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Get all user's todo
       tags:
       - Todo
@@ -142,6 +143,8 @@ paths:
         "401":
           description: Unauthorized
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Delete todo from user
       tags:
       - Todo
@@ -169,6 +172,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Update todo for user
       tags:
       - Todo
@@ -195,6 +200,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Add todo for user
       tags:
       - Todo
@@ -224,6 +231,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Get todo
       tags:
       - Todo
@@ -245,6 +254,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Delete user
       tags:
       - User
@@ -265,6 +276,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Get user
       tags:
       - User
@@ -289,6 +302,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Update emaail
       tags:
       - User
@@ -313,6 +328,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: Update login
       tags:
       - User
@@ -342,4 +359,9 @@ paths:
       - User
 produces:
 - application/json
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: jwt token
+    type: apiKey
 swagger: "2.0"

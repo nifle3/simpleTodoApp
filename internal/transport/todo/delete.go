@@ -9,6 +9,7 @@ import (
 // @Tags		Todo
 // @Accept		json
 // @Produce	json
+// @Security ApiKeyAuth
 // @Param		todo_id	formData	string	true	"todo id in stirng"
 // @Failure	400		{object}	error
 // @Failure	401		{object}	error

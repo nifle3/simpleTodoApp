@@ -10,6 +10,7 @@ import (
 // @Tags		User
 // @Accept		json
 // @Produce	json
+// @Security ApiKeyAuth
 // @Failure	400	{object}	error
 // @Failure	401	{object}	error
 // @Failure	500	{object}	error

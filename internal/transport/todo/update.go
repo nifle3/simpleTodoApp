@@ -11,6 +11,7 @@ import (
 // @Tags		Todo
 // @Accept		json
 // @Produce	json
+// @Security ApiKeyAuth
 // @Param		input	body		models.Todo	true	"used for updated created todo"
 // @Failure	400		{object}	error
 // @Failure	401		{object}	error
