@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -17,6 +18,11 @@ import (
 // @Success	200
 // @Router		/v1/auth [post]
 func (r Router) Login(w http.ResponseWriter, rq *http.Request) (string, error) {
+	if !(rq.Form.Has("email") && rq.Form.Has("password")) {
+		err := fmt.Errorf("form has not enough parametr")
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return "", err
+	}
 	email := rq.PostFormValue("email")
 	password := rq.PostFormValue("password")
 
