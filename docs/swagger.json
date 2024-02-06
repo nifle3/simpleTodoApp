@@ -16,7 +16,7 @@
         },
         "version": "1.0"
     },
-    "host": ":8080",
+    "host": "localhost:8080",
     "paths": {
         "/v1/auth": {
             "post": {
@@ -547,9 +547,6 @@
                     "type": "string"
                 },
                 "Password": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 }
             }

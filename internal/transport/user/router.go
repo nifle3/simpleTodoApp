@@ -6,7 +6,7 @@ import (
 )
 
 type UseCase interface {
-	Login(email, password string, ctx context.Context) (models.User, error)
+	Login(email, password string, ctx context.Context) (string, error)
 	Add(user models.User, ctx context.Context) error
 	Delete(userID string, ctx context.Context) error
 	UpdatePassword(userID, password string, ctx context.Context) error

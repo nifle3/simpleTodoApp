@@ -11,7 +11,7 @@ type Storage interface {
 	UpdateLogin(login, userID string, ctx context.Context) error
 	UpdateEmail(email, userID string, ctx context.Context) error
 	DeleteUser(userID string, ctx context.Context) error
-	CheckUserExist(email string, ctx context.Context) (models.User, error)
+	CheckUserExist(email string, ctx context.Context) (string, string, error)
 	Get(userID string, ctx context.Context) (models.User, error)
 }
 

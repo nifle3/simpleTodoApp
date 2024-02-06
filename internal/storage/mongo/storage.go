@@ -14,7 +14,7 @@ const (
 )
 
 type Storage struct {
-	userCollection *mongo.Collection
+	db *mongo.Client
 }
 
 func New(uri string, ctx context.Context) (*Storage, error) {
@@ -28,9 +28,11 @@ func New(uri string, ctx context.Context) (*Storage, error) {
 		return nil, fmt.Errorf("Cannot ping to database")
 	}
 
-	collection := db.Database(dbName).Collection(colName)
-
 	return &Storage{
-		userCollection: collection,
+		db: db,
 	}, nil
+}
+
+func (s Storage) GetCollections() *mongo.Collection {
+	return s.db.Database(dbName).Collection(colName)
 }

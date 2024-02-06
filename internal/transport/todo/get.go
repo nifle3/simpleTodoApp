@@ -10,17 +10,17 @@ const (
 	todoQuery = "todo_id"
 )
 
-//		@Summary	Get todo
-//		@Tags		Todo
-//		@Accept		json
-//		@Produce	json
-//	 @Security ApiKeyAuth
-//		@Param		todo_id	query		string	true	"todo id which get"
-//		@Failure	400		{object}	error
-//		@Failure	401		{object}	error
-//		@Failure	500		{object}	error
-//		@Success	200		{object}	models.Todo	"one model"
-//		@Router		/v1/todo/{id} [get]
+//	@Summary	Get todo
+//	@Tags		Todo
+//	@Accept		json
+//	@Produce	json
+//	@Security	ApiKeyAuth
+//	@Param		todo_id	query		string	true	"todo id which get"
+//	@Failure	400		{object}	error
+//	@Failure	401		{object}	error
+//	@Failure	500		{object}	error
+//	@Success	200		{object}	models.Todo	"one model"
+//	@Router		/v1/todo/{id} [get]
 func (r Router) GetOne(userID string, w http.ResponseWriter, rq *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
@@ -50,7 +50,7 @@ func (r Router) GetOne(userID string, w http.ResponseWriter, rq *http.Request) {
 //	@Accept		json
 //	@Produce	json
 //
-// @Security ApiKeyAuth
+//	@Security	ApiKeyAuth
 //
 //	@Failure	400	{object}	error
 //	@Failure	401	{object}	error

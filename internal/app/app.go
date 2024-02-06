@@ -37,5 +37,7 @@ func Start() {
 	jwt := jwttoken.New(cfg.JwtKey)
 	middlewareLogger := middleware.New(logger)
 
-	http.Listen(todoRouter, userRouter, jwt, middlewareLogger, cfg.HttpServer.Port)
+	if err := http.Listen(todoRouter, userRouter, jwt, middlewareLogger, cfg.HttpServer.Port); err != nil {
+		logger.LogAttrs(context.Background(), slog.LevelError, "HTTP:", slog.String("err", err.Error()))
+	}
 }

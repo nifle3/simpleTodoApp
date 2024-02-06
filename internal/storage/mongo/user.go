@@ -11,12 +11,10 @@ import (
 )
 
 func (s Storage) AddUser(user models.User, ctx context.Context) error {
-	insertStruct, err := converter.ToMongo(user)
-	if err != nil {
-		return err
-	}
+	insertStruct := converter.ToMongoWithNewID(user)
 
-	_, err = s.userCollection.InsertOne(ctx, insertStruct)
+	col := s.GetCollections()
+	_, err := col.InsertOne(ctx, insertStruct)
 
 	return err
 }
@@ -46,7 +44,8 @@ func (s Storage) updateUserField(userId, key, value string, ctx context.Context)
 		},
 	}}
 
-	_, err = s.userCollection.UpdateOne(ctx, bson.M{"_id": id}, updatedStruct)
+	col := s.GetCollections()
+	_, err = col.UpdateOne(ctx, bson.M{"_id": id}, updatedStruct)
 
 	return err
 }
@@ -57,25 +56,29 @@ func (s Storage) DeleteUser(userId string, ctx context.Context) error {
 		return err
 	}
 
-	_, err = s.userCollection.DeleteOne(ctx, bson.M{"_id": id})
+	col := s.GetCollections()
+	_, err = col.DeleteOne(ctx, bson.M{"_id": id})
 
 	return err
 }
 
-func (s Storage) CheckUserExist(email string, ctx context.Context) (models.User, error) {
+func (s Storage) CheckUserExist(email string, ctx context.Context) (string, string, error) {
 	var resultUser object.User
 
-	err := s.userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&resultUser)
+	col := s.GetCollections()
+	err := col.FindOne(ctx, bson.D{{Key: "email", Value: email}}).Decode(&resultUser)
 	if err != nil {
-		return models.User{}, err
+		return "", "", err
 	}
 
-	return converter.ToDomain(resultUser), nil
+	return resultUser.Password, resultUser.ID.Hex(), nil
 }
 
 func (s Storage) Get(userID string, ctx context.Context) (models.User, error) {
+	col := s.GetCollections()
+
 	filter := bson.D{{Key: "_id", Value: userID}}
-	result := s.userCollection.FindOne(ctx, filter)
+	result := col.FindOne(ctx, filter)
 	if result.Err() != nil {
 		return models.User{}, result.Err()
 	}

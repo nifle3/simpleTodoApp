@@ -15,13 +15,13 @@ import (
 //	@produce	json
 //	@accept		json
 
-//  @securitydefinitions.apikey ApiKeyAuth
-//  @in header
-//  @name jwt token
+//	@securitydefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						jwt token
 
 //	@license.name	MIT
 
-//	@host		:8080
+//	@host	localhost:8080
 
 // @scheme	http
 func main() {
